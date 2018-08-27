@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
+import NavBar from './components/navbar/NavBar';
+import Search from './components/search/Search';
+
 
 class App extends Component {
 
@@ -9,22 +13,19 @@ class App extends Component {
       errors: null
     };
   
-    
-  
-
     fetchUsers() {
-      // Where we're fetching data from
+      // Where are we fetching data from
       fetch(`http://localhost:8000/api/chats`)
-        // We get the API response and receive data in JSON format...
+        // We get the API response then receive data in JSON...
         .then(response => response.json())
-        // ...then we update the users state
+        // ...then we update the users chats to the state
         .then(data =>
           this.setState({
             chats: data,
             isLoading: false,
           })
         )
-        // Catch any errors we hit and update the app
+        // Catch any unknowns (errors) and update loading status
         .catch(error => this.setState({ error, isLoading: false }));
     }
 
@@ -35,22 +36,28 @@ class App extends Component {
   }
 
   render() {
+    // destructure isLoading, chats and error from the state
     const { isLoading, chats, error } = this.state;
     return (
+      // Fragment allows components to not poullote the html with unnessessary divs
       <React.Fragment>
-        <h1>Random User</h1>
+        
+          <div>
+          <NavBar />
+          <Search />
+        <h1>User Messages</h1>
        
+        
         {error ? <p>{error.message}</p> : null}
         
         {!isLoading ? (
           chats.map(chat => {
             const { id, parent, username, full_name, avatar, date, comment } = chat;
             return (
-              <div key={username}>
+              <div key={id}>
                 <img src={avatar} alt={username}></img>
                 <p>id: {id} </p>
-                <p>parent id: {parent} </p>
-                <p>id: {id} </p>                
+                <p>parent id: {parent} </p>    
                 <p>Name: {full_name}</p>
                 <p>Comments: {comment}</p>
                 <p>{date}</p>
@@ -62,6 +69,8 @@ class App extends Component {
         ) : (
           <h3>Loading...</h3>
         )}
+        </div>
+        
       </React.Fragment>
     );
   }
