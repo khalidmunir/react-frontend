@@ -3,6 +3,7 @@ import './App.css';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 import NavBar from './components/navbar/NavBar';
 import Search from './components/search/Search';
+import ChatItem from './components/chatitem/ChatItem';
 
 
 class App extends Component {
@@ -45,6 +46,7 @@ class App extends Component {
           <div>
           <NavBar />
           <Search />
+          
         <h1>User Messages</h1>
        
         
@@ -55,12 +57,13 @@ class App extends Component {
             const { id, parent, username, full_name, avatar, date, comment } = chat;
             return (
               <div key={id}>
-                <img src={avatar} alt={username}></img>
+                <ChatItem chat={ chat }/>
+                {/* <img src={avatar} alt={username}></img>
                 <p>id: {id} </p>
                 <p>parent id: {parent} </p>    
                 <p>Name: {full_name}</p>
                 <p>Comments: {comment}</p>
-                <p>{date}</p>
+                <p>{date}</p> */}
                 <hr />
               </div>
             );
