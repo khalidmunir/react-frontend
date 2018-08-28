@@ -6,7 +6,7 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 import NavBar from './components/navbar/NavBar'
 import Search from './components/search/Search'
 import ChatItem from './components/chatitem/ChatItem'
-// import chatlist from './components/chatlist';
+// import ChatList from './components/chatlist';
 
 class App extends Component {
 
@@ -115,9 +115,10 @@ class App extends Component {
         
         {!isLoading ? (
           chats.map(chat => {
-            const { id, parent, username, full_name, avatar, date, comment } = chat;
+            
             return (
-              <div key={id}>
+              <div key={chat.id}>
+                
                 <ChatItem chat={ chat }/>
                 
               </div>

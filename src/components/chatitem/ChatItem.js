@@ -8,6 +8,12 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import Avatar from '@material-ui/core/Avatar';
+
 const styles = {
   card: {
     maxWidth: '80vw',
@@ -16,42 +22,64 @@ const styles = {
     // ⚠️ object-fit is not supported by IE11.
     objectFit: 'cover',
   },
+  readreply: {
+      backgroundColor: '#ff0000',
+  },
 };
 
 function ChatItem(props) {
   const { classes, chat } = props;
   // extract further from the chat in props
-  const { id, avatar, comment, username } = chat;
+  //const { id, avatar, comment, username, validParent } = chat;
+  const { id, parent, username, full_name, avatar, dateenglish, datehumanform, comment, validParent } = chat;
 
   //console.log("CHAT", chat)
-  //console.log("Comment", comment)
+  console.log("validParent", validParent)
 
   return (
-    <Card className={classes.card}>
-      <CardMedia
-        component="img"
-        className={classes.media}
-        width="10%"
-        image={avatar}
-        title='Some Messages from the users'
-      />
-      <CardContent>
-        <Typography gutterBottom variant="headline" component="h2">
-          { username }
-        </Typography>
-        <Typography component="p">
-          { comment }   
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small" color="primary">
-          Share
-        </Button>
-        <Button size="small" color="primary">
-          Learn More
-        </Button>
-      </CardActions>
-    </Card>
+
+    <div className={classes.root}>
+        <List>
+            <ListItem key={id} dense button className={classes.listItem}>
+              <Avatar alt="Remy Sharp" src={ avatar } />
+              <ListItemText primary={ comment } />
+              <br />
+              <ListItemText primary={ dateenglish } secondary={datehumanform} />
+                       
+            </ListItem>
+
+        </List>
+      </div>
+
+
+
+
+
+    // <Card className={classes.card}>
+    //   <CardMedia
+    //     component="img"
+    //     className={classes.media}
+    //     width="10vw"
+    //     image={avatar}
+    //     title='Some Messages from the users'
+    //   />
+    //   <CardContent >
+    //     <Typography gutterBottom variant="headline" component="h2" className={(validParent) ? 'reply' : 'reply'}>
+    //       { username }
+    //     </Typography>
+    //     <Typography component="p" className={(validParent) ? 'readreply' : 'reply'}>
+    //       { comment }   
+    //     </Typography>
+    //   </CardContent>
+    //   <CardActions>
+    //     <Button size="small" color="primary">
+    //       Share
+    //     </Button>
+    //     <Button size="small" color="primary">
+    //       Learn More
+    //     </Button>
+    //   </CardActions>
+    // </Card>
   );
 }
 
