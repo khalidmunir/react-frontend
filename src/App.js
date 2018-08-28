@@ -41,9 +41,9 @@ class App extends Component {
     let resortedList = null; 
 
     let sorted_items = inList.sort((a,b) => {
-      // wasted much time figuring this - need to use minus due to behaviour of moments
+      // wasted much time figuring this - need to use minus due to behaviour of moment.js
       // return value giving falsy/truths. Made me wish I stuck to underscore 
-      // and using the helper for sorting by date 
+      // and using the helper function for sorting by date 
       return moment(b.date).format('X') -  moment(a.date).format('X') 
     });
   
@@ -68,13 +68,7 @@ class App extends Component {
       return item.parent !== null && (parentList.findIndex(x => x.id === item.parent) > 0)
     })
 
-    // CHANGE IN LOGIC - No Longer Needthis bit
-    // // grab the orphaned children - ready for final processing/merge
-    // let orphanList = inList.filter( (item) => {
-    //   return item.parent !== null && (parentList.findIndex(x => x.id === item.parent) < 0)
-    // })
-
-    // Algorithm - To fix List : 
+    // Algorithm required - To fix List : 
     // map through the childrenList and find the parentList entry to append to..
     childrenList.map( (child, index) => {
       

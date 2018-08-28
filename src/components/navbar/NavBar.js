@@ -1,11 +1,3 @@
-// import React from 'react'
-// import AppBar from '@material-ui/core/AppBar'
-
-// const NavBar = () => <AppBar title="NGC Messages"><h2>User Messages</h2></AppBar>
-    
-
-// export default NavBar;
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
