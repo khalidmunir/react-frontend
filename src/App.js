@@ -24,7 +24,7 @@ class App extends Component {
         .then(response => response.json())
         // Normally would use a store like redux
         // being this example demo - simpler to it do this way.. 
-        .then(sorted => this.sortByDate(sorted))
+        //.then(sorted => this.sortByDate(sorted))
         .then(sorted => this.fixRelationships(sorted))
         // finally data looks good - so set the state.
         .then(data =>
@@ -38,25 +38,21 @@ class App extends Component {
     }
 
     sortByDate(items) {
-      //console.log("BEFORE::SOrtBYDate Items", items) 
       
       // use moments.js to sort the list by date
       let sorted_items = items.sort((a,b) => {
-        //console.log("sorting", moment(a.date).valueOf)
-        
           return moment(b.date).format('X') -  moment(a.date).format('X') 
       });
-    
-      //console.log("AFTER::SOrtBYDate Items",sorted_items) 
       
-      // sorted_items are sorted by date
-      items = sorted_items;
+      // sorted_items are now sorted by date
+      //items = sorted_items;
 
       // fix and add relevant date helpers
       items.map( (item) => {
       
         item.dateenglish = moment(item.date).format('MMMM Do YYYY, h:mm:ss a')
         item.datehumanform = moment(item.date).fromNow()
+        
 
         return item;
       })
@@ -66,30 +62,65 @@ class App extends Component {
 
   fixRelationships(inList) {
 
-    // Walk the List 
-    // and check if the parent id does exists- only then 
-    // reshuffle the array.
+    // check if the parent id does exists- only then add to the array.
     let resortedList = null; 
 
-    
+    let sorted_items = inList.sort((a,b) => {
+      // wasted much time figuring need to use minus due to behaviour of moments
+      // return value giving falsy/truths
+      return moment(b.date).format('X') -  moment(a.date).format('X') 
+    });
+  
+    // fix and add relevant date helpers
+    sorted_items.map( (item) => {
+      
+      item.dateenglish = moment(item.date).format('MMMM Do YYYY, h:mm:ss a')
+      item.datehumanform = moment(item.date).fromNow()
+      item.validParent = null;
+
+      return item;
+    })
     
     // grab all the parents - children are more tricky as only some have valid parents (they dont exist in the array).
     // (don't remove orphaned children as they will need to be re-inserted date sorted)
-    let parentList = inList.filter( (item) => { 
-      return ((item.parent === null)||(item.parent !== null && (inList.findIndex(x => x.id === item.parent) < 0)))
+    let parentList = sorted_items.filter( (item) => { 
+      return ((item.parent === null)||(item.parent !== null && (sorted_items.findIndex(x => x.id === item.parent) < 0)))
     })
 
     // grab Only the children with valid parents from the parentlist
-    let childrenList = inList.filter( (item) => {
+    let childrenList = sorted_items.filter( (item) => {
       return item.parent !== null && (parentList.findIndex(x => x.id === item.parent) > 0)
     })
 
-    // grab the orphaned children - ready for final processing/merge
-    let orphanList = inList.filter( (item) => {
-      return item.parent !== null && (parentList.findIndex(x => x.id === item.parent) < 0)
-    })
+    // CHANGE IN LOGIC - No Longer Needthis bit
+    // // grab the orphaned children - ready for final processing/merge
+    // let orphanList = inList.filter( (item) => {
+    //   return item.parent !== null && (parentList.findIndex(x => x.id === item.parent) < 0)
+    // })
 
     // Algorithm - To fix List : 
+    // map through the childrenList and find the parentList entry to append to..
+    childrenList.map( (child, index) => {
+      
+      for(let i=0;i<parentList.length;i++) {
+        
+        // console.log("THeCHild", index, child.id, child.parent)
+        // console.log("TheParent", parentList[i].id, parentList[i].parent)
+        // insert child into correct position in sorted_Array        
+        if( parentList[i].id == child.parent) {
+          parentList.splice( i+1, 0, child );
+          break;
+        }
+      }
+
+
+
+    })
+
+
+    console.log(" ### FIXED Parent List ###", parentList)
+
+
     // append orphaned entries into parent list (since not vaild children, i.e. almost real parents)
     // then sort by date and append the real children into the correct slots
 
@@ -111,56 +142,62 @@ class App extends Component {
     //   return item;
     // })
 
+
+    
+
+
+
+
     console.log("resortedList Items", resortedList)
 
     // date sort the children and append in reverse for loop so mutiple resonses for a single parent remains intact.
 
     console.log( "childernList ", childrenList )
     console.log( "parentList ", parentList )
-    console.log( "orphanList ", orphanList )
+    //console.log( "orphanList ", orphanList )
 
 
-    let NewresortedList = inList.map((item, index, parentList) => {
+    // let NewresortedList = inList.map((item, index, parentList) => {
 
-      console.log(moment(item.date).valueOf())
-      if(item.parent) {
-        console.log("I got a parent", item.id, item.parent)
-        inList.map((it) => {
-          if(it.id == item.parent) {
+    //   console.log(moment(item.date).valueOf())
+    //   if(item.parent) {
+    //     console.log("I got a parent", item.id, item.parent)
+    //     inList.map((it) => {
+    //       if(it.id == item.parent) {
 
 
-            let localItem = item;
+    //         let localItem = item;
             
 
 
-            // find local item position in array and remove it
-            // find the parent id in the array (as item.id) and push this child item after it
-            // finally the array is sorted by date and replies
+    //         // find local item position in array and remove it
+    //         // find the parent id in the array (as item.id) and push this child item after it
+    //         // finally the array is sorted by date and replies
 
 
-            // confirmed the parent and child exists. 
+    //         // confirmed the parent and child exists. 
 
-            // thinking about the logic here... do I need to manupulate the array or 
-            // should I allow react to fix this at display time ?? 
-            // thinking......//? 
+    //         // thinking about the logic here... do I need to manupulate the array or 
+    //         // should I allow react to fix this at display time ?? 
+    //         // thinking......//? 
 
 
-            console.log("THIS IS ME (PARENT) ", it)
-            console.log("AND MY CHILD EXISTS", item)
-          } else {
-            //console.log("SORRY NO PARENT EXISTS", it)
-          }
-        })
+    //         console.log("THIS IS ME (PARENT) ", it)
+    //         console.log("AND MY CHILD EXISTS", item)
+    //       } else {
+    //         //console.log("SORRY NO PARENT EXISTS", it)
+    //       }
+    //     })
         
-      }
-      else {
-        console.log("I got NO parent", item.id, item.parent)
-      }
+    //   }
+    //   else {
+    //     console.log("I got NO parent", item.id, item.parent)
+    //   }
 
 
-      return item;
+    //   return item;
       
-    })
+    // })
 
     
 
