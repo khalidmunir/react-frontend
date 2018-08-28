@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 
 const styles = {
   card: {
-    maxWidth: 345,
+    maxWidth: '80vw',
   },
   media: {
     // ⚠️ object-fit is not supported by IE11.
@@ -23,17 +23,17 @@ function ChatItem(props) {
   // extract further from the chat in props
   const { id, avatar, comment, username } = chat;
 
-  console.log("CHAT", chat)
-  console.log("Comment", comment)
+  //console.log("CHAT", chat)
+  //console.log("Comment", comment)
 
   return (
     <Card className={classes.card}>
       <CardMedia
         component="img"
         className={classes.media}
-        width="100%"
+        width="10%"
         image={avatar}
-        title="Some Messages from you the users"
+        title='Some Messages from the users'
       />
       <CardContent>
         <Typography gutterBottom variant="headline" component="h2">
