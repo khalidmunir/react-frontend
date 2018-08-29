@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 import moment from 'moment'
 
 import './App.css'
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
+//import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 import NavBar from './components/navbar/NavBar'
 import Search from './components/search/Search'
 import ChatItem from './components/chatitem/ChatItem'
-// import ChatList from './components/chatlist';
+
 
 class App extends Component {
 
@@ -93,7 +93,6 @@ class App extends Component {
   componentDidMount() {
 
     this.fetchUsers()
-
   }
 
   render() {
